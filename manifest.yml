@@ -4,4 +4,3 @@ applications:
   memory: 1G
   instances: 1
   random-route: true
-  command: node app.js
