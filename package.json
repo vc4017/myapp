@@ -5,8 +5,7 @@
   "main": "\u001b[D\u001b[D\u001b[D\u001b\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[rypoint: app.js",
   "scripts": {
     "test": "mocha"
-  },
-  "publishConfig":{"registry":"http://localhost:8081/artifactory/api/npm/myapp/"},
+  }
   "author": "",
   "license": "ISC",
   "dependencies": {
