@@ -2,6 +2,7 @@
 groups:
 - name: main
   jobs:
+  - test
   - build-docker-image
   - deploy-job
 resources:
@@ -30,11 +31,11 @@ resources:
     repository: venki521/dockerimage
 
 jobs:
-
+ 
 - name: test
-    serial: true
-    disable_manual_trigger: false
-    plan:
+  serial: true
+  disable_manual_trigger: false
+  plan:
       - get: myapp
         trigger: true
 
@@ -47,8 +48,6 @@ jobs:
           inputs:
             - name: myapp
               path: .
-          outputs:
-            - name: node_modules
           run:
             path: npm
             args: [ install ]
@@ -60,9 +59,8 @@ jobs:
             type: docker-image
             source: {repository: node, tag: "6" }
           inputs:
-            - name: myapp
-              path: .
             - name: node_modules
+              path: .
           run:
             path: npm
             args: [ test ]
