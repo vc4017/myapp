@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "\u001b[D\u001b[D\u001b[D\u001b\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[rypoint: app.js",
-  "scripts": {
-    "test": "mocha"
-  }
   "author": "",
   "license": "ISC",
   "dependencies": {
