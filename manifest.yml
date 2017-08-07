@@ -1,6 +1,6 @@
 ---
 applications:
 - name: myapp
-  memory: 1G
+  memory: 512M
   instances: 1
   random-route: true
