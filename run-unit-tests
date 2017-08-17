@@ -3,5 +3,6 @@
 set -xe
 
 cd myapp
-npm install
-mocha tests --recursive
+npm install --save-dev mocha
+npm install mocha
+npm test
