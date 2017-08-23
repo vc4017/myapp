@@ -71,6 +71,8 @@ jobs:
   plan:
   - get: myapp
     trigger: true
+    passed:
+       - test
   - put: docker-image
     params:
       build: myapp
@@ -80,6 +82,8 @@ jobs:
   serial: true
   plan:
   - {get: myapp, trigger: true}
+    passed:
+      - build-docker-image
   - put: cf-env
     params:
       manifest: myapp/manifest.yml
