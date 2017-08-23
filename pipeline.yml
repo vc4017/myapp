@@ -81,7 +81,7 @@ jobs:
 - name: deploy-job
   serial: true
   plan:
-  - get: docker-image
+  - get: myapp
     trigger: true
     passed:
       - build-docker-image
