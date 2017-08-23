@@ -4,6 +4,7 @@ groups:
   jobs:
   - test
   - build-docker-image
+  - build-artifact
   - deploy-job
 resources:
 - name: myapp
@@ -29,6 +30,15 @@ resources:
     username: venki521
     password: venki@521
     repository: venki521/dockerimage
+
+- name: artifactory
+  type: artifactory
+  source:
+    endpoint: http://172.17.13.59:8081/artifactory
+    repository: "example-repo-local/"
+    regex: "pivotal-admin-(?<version>.*).tar.gz"
+    username: admin
+    password: venki@521
 
 jobs:
  
@@ -77,6 +87,17 @@ jobs:
     params:
       build: myapp
 
+- name: build-artifact
+  public: true
+  serial: true
+  plan:
+  - get: docker-image
+    trigger: true
+    passed:
+       - build-docker-image
+  - put: artifactory
+    params:
+      build: myapp
 
 - name: deploy-job
   serial: true
