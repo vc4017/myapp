@@ -81,7 +81,8 @@ jobs:
 - name: deploy-job
   serial: true
   plan:
-  - {get: myapp, trigger: true}
+  - get: myapp
+    trigger: true
     passed:
       - build-docker-image
   - put: cf-env
