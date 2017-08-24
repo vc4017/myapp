@@ -39,14 +39,14 @@ jobs:
           export DATESTRING=$(date +"%Y%m%d")
           echo "This is my file" > ./build/myapp-$(date +"%Y%m%d%H%S").txt
           find .
-  - put: file-repository
+  - put: artifactory-repository
     params: { file: ./build/myapp-*.txt }
 
 - name: trigger-when-new-file-is-added-to-artifactory
   serial: true
   public: true
   plan:
-  - get: file-repository
+  - get: artifactory-repository
     trigger: true
     passed:
       - build-and-save-to-artifactory
