@@ -91,7 +91,7 @@ jobs:
   public: true
   serial: true
   plan:
-  - get: docker-image
+  - get: myapp
     trigger: true
     passed:
        - build-docker-image
