@@ -2,6 +2,7 @@
 groups:
 - name: main
   jobs:
+  - install
   - test
   - build-docker-image
   - deploy-job
@@ -32,7 +33,7 @@ resources:
 
 jobs:
  
-- name: test
+- name: install
   serial: true
   disable_manual_trigger: false
   plan:
@@ -52,6 +53,14 @@ jobs:
             path: npm
             args: [ install ]
 
+- name: test
+  serial: true
+  disable_manual_trigger: false
+  plan:
+      - get: myapp
+        trigger: true
+        passed:
+           - install
       - task: npm-test
         config:
           platform: linux
