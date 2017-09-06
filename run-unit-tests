@@ -1,8 +1,0 @@
-#!/bin/bash
-
-set -xe
-
-cd myapp
-npm install --save-dev mocha
-npm install mocha
-npm test
