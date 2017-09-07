@@ -11,7 +11,7 @@ resources:
   check_every: 1m
   source:
     endpoint: http://172.17.13.59:8081/artifactory
-    repository: "http://localhost:8081/artifactory/npm-repo-cache/"
+    repository: "libs-release-local/"
     regex: "myapp-(?<version>.*).txt"
     username: admin
     password: venki@521
