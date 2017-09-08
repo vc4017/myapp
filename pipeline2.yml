@@ -11,8 +11,7 @@ resources:
   check_every: 1m
   source:
     endpoint: http://172.17.13.59:8081/artifactory
-    repository: "libs-release-local/"
-    regex: "myapp-(?<version>.*).txt"
+    repository: "/libs-release-local/"
     username: admin
     password: venki@521
 
