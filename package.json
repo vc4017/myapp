@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "test": "mocha"
+	"start": "app.js"
   },
   "description": "",
   "main": "\u001b[D\u001b[D\u001b[D\u001b\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[rypoint: app.js",
