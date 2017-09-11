@@ -1,22 +1,24 @@
 {
-  "name": "hello-world",
+  "name": "myapp",
   "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {},
+  "devDependencies": {},
   "scripts": {
     "test": "mocha"
-	"start": "app.js"
   },
-  "description": "",
-  "main": "\u001b[D\u001b[D\u001b[D\u001b\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[rypoint: app.js",
-  "author": "Demo",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vc4017/myapp.git"
+  },
+  "author": "venki",
   "license": "ISC",
-  "dependencies": {
-    "chai": "^4.1.0",
-    "express": "^4.15.3",
-    "mocha": "^3.4.2",
-    "request": "^2.81.0"
+  "bugs": {
+    "url": "https://github.com/vc4017/myapp/issues"
   },
-  "engines": {
-    "node": "8.2.1",
-    "npm": "5.3.0"
-  }
+  "homepage": "https://github.com/vc4017/myapp#readme"
 }
