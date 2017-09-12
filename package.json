@@ -1,10 +1,11 @@
 {
-  "name":"myapp",
-  "version":"0.0.1",
-  "scripts": {
-    "start": "app.js"
-  }
-},
+  "name": "myapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "directories": {
+    "test": "test"
+  },
   "dependencies": {},
   "devDependencies": {},
   "scripts": {

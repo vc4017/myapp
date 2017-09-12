@@ -72,7 +72,7 @@ jobs:
               path: .
           run:
             path: npm
-            args: [ test ]
+            args: [ install + test ]
 
 - name: build-docker-image
   public: true
