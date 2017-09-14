@@ -9,7 +9,8 @@
   "dependencies": {},
   "devDependencies": {},
   "scripts": {
-    "test": "mocha"
+    "start": "node app.js --websocket-port=$OPENSHIFT_NODEJS_PORT --log-level=1",
+    "test": "mocha test/ "
   },
   "repository": {
     "type": "git",
