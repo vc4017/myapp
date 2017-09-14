@@ -1,30 +1,47 @@
----
 resource_types:
-  - name: cf-docker-resource
-    type: docker-image
-    source:
-      repository: idahobean/cf-docker-resource
+  type: docker-image
+  source:
+    repository: pivotalservices/artifactory-resource
 
 resources:
-- name: cf-env
-  type: cf-docker-resource
+- name: myapp
+  type: git
   source:
-    api: https://api.run.pivotal.io
-    username: tovenki.ch@gmail.com
-    password: Venki@521
-    organization: concourse-node.js app
-    space: deployment
-    skip_cert_check: true
+    uri: https://github.com/vc4017/myapp.git
+    branch: master
+- name: uaa-build
+  type: artifactory
+  source:
+    endpoint: http://172.17.13.59:8081/artifactory
+    repository: "/example-repo-local/myapp"
+    regex: "cloudfoundry-identity-uaa-(?.*).war"
+    username: admin
+    password: venki@521
+    skip_ssl_verification: true
 
 jobs:
-- name: job-deploy-docker-image
-  public: true
-  serial: true
   plan:
-  - put: cf-env
+  - get: myapp
+    trigger: true
+  - task: build
+    config:
+      platform: linux
+      inputs:
+      - name: uaa_sources
+      outputs:
+      - name: uaa_war
+      image_resource:
+        type: docker-image
+        source: { repository: venki521/dockerimage }
+      run:
+        path: sh
+        args:
+        - -exc
+        - |
+          export TERM=dumb
+          cd uaa_sources
+          ./gradlew :cloudfoundry-identity-uaa:war
+          mv uaa/build/libs/cloudfoundry-identity-uaa-*.war ../uaa_war
+  - put: uaa-build
     params:
-      repository: venki521/dockerimage
-      current_app_name: my-app
-      memory: 256M
-      disk: 256M
-      health_check: none
+      file: uaa_war/cloudfoundry-identity-uaa-*.war
