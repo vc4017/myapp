@@ -1,4 +1,6 @@
+---
 resource_types:
+- name: artifactory 
   type: docker-image
   source:
     repository: pivotalservices/artifactory-resource
@@ -14,12 +16,12 @@ resources:
   source:
     endpoint: http://172.17.13.59:8081/artifactory
     repository: "/example-repo-local/myapp"
-    regex: "cloudfoundry-identity-uaa-(?.*).war"
     username: admin
     password: venki@521
     skip_ssl_verification: true
 
 jobs:
+- name: build        
   plan:
   - get: myapp
     trigger: true
@@ -27,7 +29,7 @@ jobs:
     config:
       platform: linux
       inputs:
-      - name: uaa_sources
+      - name: myapp
       outputs:
       - name: uaa_war
       image_resource:
@@ -39,9 +41,9 @@ jobs:
         - -exc
         - |
           export TERM=dumb
-          cd uaa_sources
-          ./gradlew :cloudfoundry-identity-uaa:war
-          mv uaa/build/libs/cloudfoundry-identity-uaa-*.war ../uaa_war
+          cd myapp
+          npm pack
+          mv ./myapp-1.0.0.tgz ../uaa_war
   - put: uaa-build
     params:
-      file: uaa_war/cloudfoundry-identity-uaa-*.war
+      file: uaa_war/myapp-1.0.0.tgz
