@@ -43,7 +43,7 @@ jobs:
           export TERM=dumb
           cd myapp
           npm pack
-          mv ./myapp-1.0.0.tgz ../uaa_war
+          mv ./myapp-*.tgz ../uaa_war
   - put: uaa-build
     params:
-      file: uaa_war/myapp-1.0.0.tgz
+      file: uaa_war/myapp-*.tgz
