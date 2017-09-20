@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "test": "mocha"
-	"start": "app.Js"
+	"start": "app.js"
   },
   "description": "",
   "main": "app.js",
