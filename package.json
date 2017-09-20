@@ -1,25 +1,22 @@
 {
-  "name": "myapp",
+  "name": "hello-world",
   "version": "1.0.0",
+  "scripts": {
+    "test": "mocha"
+	"start": "app.Js"
+  },
   "description": "",
   "main": "app.js",
-  "directories": {
-    "test": "test"
-  },
-  "dependencies": {},
-  "devDependencies": {},
-  "scripts": {
-    "start": "node app.js --websocket-port=$OPENSHIFT_NODEJS_PORT --log-level=1",
-    "test": "mocha test/ "
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/vc4017/myapp.git"
-  },
-  "author": "venki",
+  "author": "Demo",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/vc4017/myapp/issues"
+  "dependencies": {
+    "chai": "^4.1.0",
+    "express": "^4.15.3",
+    "mocha": "^3.4.2",
+    "request": "^2.81.0"
   },
-  "homepage": "https://github.com/vc4017/myapp#readme"
+  "engines": {
+    "node": "8.2.1",
+    "npm": "5.3.0"
+  }
 }
