@@ -76,7 +76,8 @@ jobs:
   plan:
       - get: myapp
         trigger: true
-        
+        passed:
+          - install
       - task: npm-test
         config:
           platform: linux
@@ -96,7 +97,8 @@ jobs:
   plan:
   - get: myapp
     trigger: true
-    
+    passed:
+      - test
   - put: docker-image
     params:
       build: myapp
@@ -105,7 +107,8 @@ jobs:
   plan:
   - get: myapp
     trigger: true
-    
+    passed:
+      - build-docker-image
   - task: build
     config:
       platform: linux
@@ -134,7 +137,8 @@ jobs:
   plan:
   - get: uaa-build
     trigger: true
-    
+    passed:
+      - build-artifact
   - put: cf-env
     params:
       manifest: myapp/manifest.yml
