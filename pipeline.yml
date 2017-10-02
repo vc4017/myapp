@@ -43,7 +43,8 @@ resources:
   type: artifactory
   source:
     endpoint: http://172.17.13.59:8081/artifactory
-    repository: "/example-repo-local/myapp"
+    repository: "/myapp/"
+    regex: "hello-world-(?<version>.*).tgz"
     username: admin
     password: venki@521
     skip_ssl_verification: true
@@ -127,15 +128,15 @@ jobs:
           export TERM=dumb
           cd myapp
           npm pack
-          mv ./myapp-*.tgz ../uaa_war
+          mv ./hello-world-1.0.0.tgz ../uaa_war
   - put: uaa-build
     params:
-      file: uaa_war/myapp-*.tgz
+      file: uaa_war/hello-world-*.tgz
 
 - name: deploy-job
   serial: true
   plan:
-  - get: uaa-build
+  - get: myapp
     trigger: true
     passed:
       - build-artifact
