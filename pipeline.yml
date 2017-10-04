@@ -2,11 +2,10 @@
 groups:
 - name: main
   jobs:
-  - install
-  - test
-  - build-docker-image
-  - build-artifact
-  - deploy-job
+  - generate node-modules and mocha test
+  - build-docker-image and pushed to dockerhub
+  - build-artifact and put artifact in jfrog artifactory
+  - deploy to pws
  
 resource_types:
 - name: artifactory 
@@ -18,67 +17,46 @@ resources:
 - name: myapp
   type: git
   source:
-    uri: https://github.com/vc4017/myapp.git
+    uri: {{git-uri}}
     branch: master
 
 - name: cf-env
   type: cf
   source:
-    api: https://api.run.pivotal.io
-    username: tovenki.ch@gmail.com
-    password: Venki@521
-    organization: concourse-node.js app
-    space: deployment
+    api: {{pws-api}}
+    username: {{pws-username}}
+    password: {{pws-password}}
+    organization: {{pws-organization}}
+    space: {{pws-space}}
     skip_cert_check: true
 
 - name: docker-image
   type: docker-image
   source:
-    email: tovenki.ch@gmail.com
-    username: venki521
-    password: venki@521
-    repository: venki521/dockerimage
+    email: {{docker-email}}
+    username: {{docker-username}}
+    password: {{docker-password}}
+    repository: {{docker-repo}}
 
 - name: uaa-build
   type: artifactory
   source:
-    endpoint: http://172.17.13.59:8081/artifactory
-    repository: "/myapp/"
-    regex: "hello-world-(?<version>.*).tgz"
-    username: admin
-    password: venki@521
+    endpoint: {{artifactory-endpoint}}
+    repository: {{artifactory-repo}}
+    regex: {{artifactory-regex}}
+    username: {{artifactory-username}}
+    password: {{artifactory-password}}
     skip_ssl_verification: true
 
 jobs:
  
-- name: install
+- name: generate node-modules and mocha test
   serial: true
   disable_manual_trigger: false
   plan:
       - get: myapp
         trigger: true
-
-      - task: npm-install
-        config:
-          platform: linux
-          image_resource:
-            type: docker-image
-            source: {repository: node, tag: "6" }
-          inputs:
-            - name: myapp
-              path: .
-          run:
-            path: npm
-            args: [ install ]
-
-- name: test
-  serial: true
-  disable_manual_trigger: false
-  plan:
-      - get: myapp
-        trigger: true
-        passed:
-          - install
+        
       - task: npm-test
         config:
           platform: linux
@@ -92,24 +70,24 @@ jobs:
             path: npm
             args: [ install-test ]
 
-- name: build-docker-image
+- name: build-docker-image and pushed to dockerhub
   public: true
   serial: true
   plan:
   - get: myapp
     trigger: true
     passed:
-      - test
+      - generate node-modules and mocha test
   - put: docker-image
     params:
       build: myapp
 
-- name: build-artifact       
+- name: build-artifact and put artifact in jfrog artifactory     
   plan:
   - get: myapp
     trigger: true
     passed:
-      - build-docker-image
+      - build-docker-image and pushed to dockerhub
   - task: build
     config:
       platform: linux
@@ -133,13 +111,13 @@ jobs:
     params:
       file: uaa_war/hello-world-*.tgz
 
-- name: deploy-job
+- name: deploy to pws
   serial: true
   plan:
   - get: myapp
     trigger: true
     passed:
-      - build-artifact
+      - build-artifact and put artifact in jfrog artifactory
   - put: cf-env
     params:
       manifest: myapp/manifest.yml
