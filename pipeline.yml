@@ -6,12 +6,18 @@ groups:
   - build-docker-image and pushed to dockerhub
   - build-artifact and put artifact in jfrog artifactory
   - deploy to pws
+  - slack-alert
  
 resource_types:
 - name: artifactory 
   type: docker-image
   source:
     repository: pivotalservices/artifactory-resource
+
+- name: slack-notification
+  type: docker-image
+  source:
+    repository: cfcommunity/slack-notification-resource
  
 resources:
 - name: myapp
@@ -127,10 +133,23 @@ jobs:
     params:
       manifest: myapp/manifest.yml
       path: myapp
+
+- name: slack-alert
+  plan: 
+  - get: cf-env
+    passed:
+      - deploy to pws   
     on_success:
       put: alert
       params:
-        channel: "@vchintala"
-        username: vchintala
-        icon_url: http://cl.ly/image/3e1h0H3H2s0P/concourse-logo.png
-        text: <!channel> Build Success!
+        channel: {{channel-name}}
+        username: {{user-name}}
+        icon_url: {{icon-url}}
+        text: <!channel> Success!
+    on_failure:
+      put: alert
+      params:
+        channel: {{channel-name}}
+        username: {{user-name}}
+        icon_url: {{icon-url}}
+        text: <!channel> Failed!
