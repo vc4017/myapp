@@ -1,13 +1,5 @@
 ---
-groups:
-- name: main
-  jobs:
-  - generate node-modules and mocha test
-  - build-docker-image and pushed to dockerhub
-  - build-artifact and put artifact in jfrog artifactory
-  - deploy to pws
-  - slack-alert
- 
+
 resource_types:
 - name: artifactory 
   type: docker-image
@@ -80,6 +72,20 @@ jobs:
           run:
             path: npm
             args: [ install-test ]
+        on_success:
+          put: alert
+          params:
+            channel: {{channel-name}}
+            username: {{user-name}}
+            icon_url: {{icon-url}}
+            text: <!channel> Mocha Test Success!
+        on_failure:
+          put: alert
+          params:
+            channel: {{channel-name}}
+            username: {{user-name}}
+            icon_url: {{icon-url}}
+            text: <!channel> Mocha Test Failed!
 
 - name: build-docker-image and pushed to dockerhub
   public: true
@@ -92,6 +98,20 @@ jobs:
   - put: docker-image
     params:
       build: myapp
+    on_success:
+      put: alert
+      params:
+        channel: {{channel-name}}
+        username: {{user-name}}
+        icon_url: {{icon-url}}
+        text: <!channel> Dockerize Success!
+    on_failure:
+      put: alert
+      params:
+        channel: {{channel-name}}
+        username: {{user-name}}
+        icon_url: {{icon-url}}
+        text: <!channel> Dockerize Failed!
 
 - name: build-artifact and put artifact in jfrog artifactory     
   plan:
@@ -121,6 +141,20 @@ jobs:
   - put: uaa-build
     params:
       file: uaa_war/hello-world-*.tgz
+    on_success:
+      put: alert
+      params:
+        channel: {{channel-name}}
+        username: {{user-name}}
+        icon_url: {{icon-url}}
+        text: <!channel> Artifact stores successfully!
+    on_failure:
+      put: alert
+      params:
+        channel: {{channel-name}}
+        username: {{user-name}}
+        icon_url: {{icon-url}}
+        text: <!channel> Artifact stores Failed!
 
 - name: deploy to pws
   serial: true
@@ -133,23 +167,19 @@ jobs:
     params:
       manifest: myapp/manifest.yml
       path: myapp
-
-- name: slack-alert
-  plan: 
-  - get: cf-env
-    passed:
-      - deploy to pws   
     on_success:
       put: alert
       params:
         channel: {{channel-name}}
         username: {{user-name}}
         icon_url: {{icon-url}}
-        text: <!channel> Success!
+        text: <!channel> PWS Deployment Success!
     on_failure:
       put: alert
       params:
         channel: {{channel-name}}
         username: {{user-name}}
         icon_url: {{icon-url}}
-        text: <!channel> Failed!
+        text: <!channel> PWS Deployment Failed!
+
+
