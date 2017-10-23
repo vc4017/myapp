@@ -48,6 +48,11 @@ resources:
     password: {{artifactory-password}}
     skip_ssl_verification: true
 
+- name: alert
+  type: slack-notification
+  source:
+    url: {{slack-uri}}
+
 jobs:
  
 - name: generate node-modules and mocha test
@@ -122,4 +127,10 @@ jobs:
     params:
       manifest: myapp/manifest.yml
       path: myapp
-
+    on_success:
+      put: alert
+      params:
+        channel: "@vchintala"
+        username: vchintala
+        icon_url: http://cl.ly/image/3e1h0H3H2s0P/concourse-logo.png
+        text: <!channel> Build Success!
