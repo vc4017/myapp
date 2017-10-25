@@ -1,4 +1,4 @@
-mvar expect  = require('chai').expect;
+var expect  = require('chai').expect;
 var request = require('request');
 
 describe('Status and content', function() {
